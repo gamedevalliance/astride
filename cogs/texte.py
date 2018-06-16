@@ -32,7 +32,7 @@ class Textes:
     @checks.has_roles_or_staff()
     async def add(self, ctx, nom: str, *, contenu: str):
         """
-            Stocke un nouveau texte. Le nom doit être en un seul mot, tandis que le contenu est libre.
+            Stocke un nouveau texte. Le nom doit être en un seul mot, ou bien entre guillemets s'il contient des espaces. Le contenu est libre.
         """
         if not contenu:
             return await ctx.author.send("{}, un texte ne peut pas être vide.".format(ctx.author.mention))

@@ -55,11 +55,14 @@ Il est possible de stocker ses propres textes, et de les nommer afin de les affi
 !texte add <nom> <contenu>
 ```
 
-Le nom doit être en un mot, tandis que le contenu est libre. Exemple :
+Le nom doit être en un seul mot ou bien entre guillemets, tandis que le contenu est libre. Exemple :
 
 ```
-!texte add SiteOfficiel Le site officiel de RPG Maker est http://www.rpgmakerweb.com/
+!texte add RME Connaissez-vous le script RME ?
+!texte add "site officiel" Le site officiel de RPG Maker est http://www.rpgmakerweb.com/
 ```
+
+Dans le premier cas, le nom `RME` ne contient pas d'espace, donc les guillemets ne sont pas nécessaires.
 
 ### Modifier un texte
 
