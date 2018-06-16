@@ -1,11 +1,10 @@
 # Bot Discord pour RPG Maker Alliance
 
-Le bot RPG Maker Alliance permet d'afficher des textes et des liens fréquemment utilisés sur notre [serveur Discord](https://discord.gg/RrBppaj). Toutes les commandes sont utilisables sur le serveur ou en message privé avec le bot. Il existe quatre catégories :
+Le bot RPG Maker Alliance permet d'afficher des textes et des liens fréquemment utilisés sur notre [serveur Discord](https://discord.gg/RrBppaj). Toutes les commandes sont utilisables sur le serveur ou en message privé avec le bot. Il existe trois catégories :
 
 ```
 video
 wiki
-faq
 texte
 ```
 
@@ -13,21 +12,25 @@ Ecrivez `!help <commande>` pour recevoir un MP avec des informations sur n'impor
 
 ## Vidéos
 
+```
+!video <nom>
+```
+
 La catégorie `!video` affiche une vidéo de la [chaîne RPG Maker Alliance](https://www.youtube.com/c/AurelienVideos). On peut aussi écrire plus simplement `!v`. Voici toutes les commandes disponibles :
 
 ```
-!video bases
-!video donjon1
-!video donjon2
-!video villes
-!video export
-!video meilleur
-!video mapping
-!video live
-!video rediffusions
+!v bases            => "Les bases de RPG Maker en 30 minutes"
+!v donjon1          => "Créer un donjon sur RPG Maker : monstres et énigmes"
+!v donjon2          => "Créer un donjon sur RPG Maker : le boss final"
+!v villes           => "Créer une ville de RPG"
+!v export           => "Exporter son jeu RPG Maker : le guide ultime"
+!v meilleur         => "Quel est le meilleur RPG Maker ?"
+!v mapping          => "Créer un jeu plus beau - Tutoriel Mapping RPG Maker"
+!v live             => Live en cours
+!v rediffusions     => Playlist des rediffusions
 ```
 
-En cas d'erreur de frappe, le bot recommandera une vidéo similaire parmi celles qui existent.
+En cas d'erreur de frappe, le bot recommandera un nom de vidéo similaire parmi ceux qui existent.
 
 ## Wiki
 
@@ -35,42 +38,17 @@ En cas d'erreur de frappe, le bot recommandera une vidéo similaire parmi celles
 !wiki
 ```
 
-Cette commande affiche un lien vers l'[Encyclopédie du making](https://wiki.rpgmakeralliance.com/).
-
-## Questions fréquentes
+Cette commande, que l'on peut aussi écrire `!w`, affiche un lien vers l'Encyclopédie du making (https://wiki.rpgmakeralliance.com/). Il est possible d'afficher un lien vers un article précis du wiki :
 
 ```
-!faq
+!wiki faq           => https://wiki.rpgmakeralliance.com/faq
+!wiki starterpack   => https://wiki.rpgmakeralliance.com/starterpack
+!wiki scripts/rme   => https://wiki.rpgmakeralliance.com/scripts/rme
 ```
-
-Cette commande affiche un lien vers la [page des questions fréquentes](https://wiki.rpgmakeralliance.com/faq) sur l'Encyclopédie.
 
 ## Textes personnalisés
 
 Il est possible de stocker ses propres textes, et de les nommer afin de les afficher rapidement plus tard. Toutes les commandes commencent par `!texte`, que l'on peut aussi écrire `!t` ou `!tag`.
-
-### Ajouter un texte
-
-```
-!texte add <nom> <contenu>
-```
-
-Le nom doit être en un seul mot ou bien entre guillemets, tandis que le contenu est libre. Exemple :
-
-```
-!texte add RME Connaissez-vous le script RME ?
-!texte add "site officiel" Le site officiel de RPG Maker est http://www.rpgmakerweb.com/
-```
-
-Dans le premier cas, le nom `RME` ne contient pas d'espace, donc les guillemets ne sont pas nécessaires.
-
-### Modifier un texte
-
-```
-!texte edit <nom> <contenu>
-```
-
-Remplace le contenu d'un texte existant.
 
 ### Afficher un texte
 
@@ -81,23 +59,51 @@ Remplace le contenu d'un texte existant.
 N'oubliez pas qu'il existe d'autres écritures plus rapides de `!texte`. Ainsi, ces trois lignes affichent le même résultat :
 
 ```
-!texte SiteOfficiel
-!t SiteOfficiel
-!tag SiteOfficiel
+!texte RME
+!tag RME
+!t RME
 ```
 
 Si le nom que vous écrivez n'existe pas, le bot vous recommandera un nom similaire parmi ceux enregistrés.
 
-### Supprimer un texte
-
-```
-!texte remove <nom>
-```
 
 ### Liste des textes
 
 ```
-!texte list
+!t list
 ```
 
 Affiche le nom de tous les textes actuellement enregistrés.
+
+### Gestion des textes
+
+*Les commandes suivantes sont réservées aux modérateurs.*
+
+#### Ajouter un texte
+
+```
+!t add <nom> <contenu>
+```
+
+Le nom doit être en un seul mot ou bien entre guillemets, tandis que le contenu est libre. Exemple :
+
+```
+!t add RME Connaissez-vous le script RME ?
+!t add "site officiel" Le site officiel de RPG Maker est http://www.rpgmakerweb.com/
+```
+
+Dans le premier cas, le nom `RME` ne contient pas d'espace, donc les guillemets ne sont pas nécessaires.
+
+#### Modifier un texte
+
+```
+!t edit <nom> <contenu>
+```
+
+Remplace le contenu d'un texte existant.
+
+#### Supprimer un texte
+
+```
+!t remove <nom>
+```
