@@ -21,7 +21,7 @@ class Utils:
             'author': ctx.author,
             'guild': ctx.guild,
             'message': ctx.message
-        }   
+        }
 
         env.update(globals())
 
@@ -30,7 +30,7 @@ class Utils:
             if inspect.isawaitable(result):
                 result = await result
         except Exception as e:
-            await self.bot.say(codeblock.format(type(e).__name__ + ': ' + str(e)))
+            await ctx.send(codeblock.format(type(e).__name__ + ': ' + str(e)))
             return
 
         await ctx.send(codeblock.format(result))

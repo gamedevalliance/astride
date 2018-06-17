@@ -1,4 +1,5 @@
 import difflib
+import aiohttp
 
 from discord.ext import commands
 
@@ -6,20 +7,22 @@ class General:
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
-    async def wiki(self, ctx):
+
+    @commands.command(aliases=["w"])
+    async def wiki(self, ctx, link: str = ""):
         """
             Affiche un lien vers l'Encyclopédie.
         """
-        await ctx.send("https://wiki.rpgmakeralliance.com")
-
-
-    @commands.command(aliases=["questions"])
-    async def faq(self, ctx):
-        """
-            Affiche un lien vers la page des questions fréquentes sur l'Encyclopédie.
-        """
-        await ctx.send("https://wiki.rpgmakeralliance.com/faq")
+        if link is None:
+            await ctx.send("https://wiki.rpgmakeralliance.com")
+        else:
+            link = "https://wiki.rpgmakeralliance.com/" + link
+            async with aiohttp.ClientSession() as session:
+                async with session.get(link) as r:
+                    if r.status == 200:
+                        await ctx.send(link)
+                    else:
+                        await ctx.author.send(link + " n'existe pas!")
 
 
     @commands.command(aliases=["v"])

@@ -11,6 +11,7 @@ class Textes:
             loop=bot.loop,
             defer_load=True)
 
+
     @commands.group(invoke_without_command=True, aliases=["t", "tag"])
     async def texte(self, ctx, *, texte: str):
         """
@@ -50,6 +51,7 @@ class Textes:
 
         await ctx.author.send("{}, texte {} créé et sauvegardé !".format(ctx.author.mention, nom))
 
+
     @texte.command()
     @checks.has_roles_or_staff()
     async def edit(self, ctx, nom: str, *, contenu: str):
@@ -67,6 +69,7 @@ class Textes:
 
         await ctx.author.send("{}, texte {} édité et sauvegardé !".format(ctx.author.mention, nom))
 
+
     @texte.command()
     @checks.has_roles_or_staff()
     async def remove(self, ctx, *, nom: str):
@@ -82,6 +85,7 @@ class Textes:
         await self.texts.remove(nom)
         await ctx.author.send("{}, texte {} supprimé !".format(ctx.author.mention, nom))
 
+
     @texte.command()
     async def list(self, ctx):
         """
@@ -93,6 +97,7 @@ class Textes:
             count = len(textes)
             textes = ", ".join("`{}`".format(texte) for texte in textes)
             await ctx.author.send("**Liste des textes pour RMA ({}):**\n{}".format(count, textes))
+
 
 def setup(bot):
     bot.add_cog(Textes(bot))
