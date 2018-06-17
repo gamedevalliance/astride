@@ -59,9 +59,9 @@ Il est possible de stocker ses propres textes, et de les nommer afin de les affi
 N'oubliez pas qu'il existe d'autres écritures plus rapides de `!texte`. Ainsi, ces trois lignes affichent le même résultat :
 
 ```
-!texte RME
-!tag RME
-!t RME
+!texte jam3
+!tag jam3
+!t jam3
 ```
 
 Si le nom que vous écrivez n'existe pas, le bot vous recommandera un nom similaire parmi ceux enregistrés.
@@ -74,6 +74,8 @@ Si le nom que vous écrivez n'existe pas, le bot vous recommandera un nom simila
 ```
 
 Affiche le nom de tous les textes actuellement enregistrés.
+
+![](https://i.imgur.com/9RBSt11.png)
 
 ### Gestion des textes
 
