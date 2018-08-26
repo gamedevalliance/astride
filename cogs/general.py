@@ -1,11 +1,30 @@
 import difflib
 import aiohttp
+import discord
 
 from discord.ext import commands
 
 class General:
     def __init__(self, bot):
         self.bot = bot
+
+
+    async def on_message(self, message):
+        if message.author.bot or isinstance(message.channel, discord.DMChannel):
+            return
+
+        if message.channel.category.name == "English":
+            return
+
+        hasHeavyGif = False
+        if message.attachments:
+            for attach in message.attachments:
+                if attach.url.lower().endswith("gif"):
+                    if attach.size >= 1048576:
+                        hasHeavyGif = True
+
+        if hasHeavyGif:
+            await message.channel.send("{}, les connections lentes et les forfaits mobiles auront du mal à afficher ton gif. Tu peux convertir ton gif en vidéo en le mettant en ligne sur <https://gfycat.com/>. Si besoin, tu peux facilement capturer des vidéos avec <https://getsharex.com/> afin d'obtenir des animations plus fluides et légères. Merci beaucoup !".format(message.author.mention))
 
 
     @commands.command(aliases=["w"])
