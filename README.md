@@ -41,9 +41,9 @@ En cas d'erreur de frappe, le bot recommandera un nom de vidéo similaire parmi 
 Cette commande, que l'on peut aussi écrire `!w`, affiche un lien vers l'Encyclopédie du making (https://wiki.rpgmakeralliance.com/). Il est possible d'afficher un lien vers un article précis du wiki :
 
 ```
-!wiki faq           => https://wiki.rpgmakeralliance.com/faq
-!wiki starterpack   => https://wiki.rpgmakeralliance.com/starterpack
-!wiki scripts/rme   => https://wiki.rpgmakeralliance.com/scripts/rme
+!wiki rpgmaker       => https://wiki.rpgmakeralliance.com/rpgmaker
+!wiki rpgmaker/faq   => https://wiki.rpgmakeralliance.com/rpgmaker/faq
+!wiki gamemaker      => https://wiki.rpgmakeralliance.com/gamemaker
 ```
 
 ## Textes personnalisés
