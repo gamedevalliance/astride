@@ -10,17 +10,15 @@ class General:
 
 
     async def on_message(self, message):
-        if message.author.bot or isinstance(message.channel, discord.DMChannel):
-            return
-
-        if message.channel.category.name == "English":
+        if message.author.bot or \
+        isinstance(message.channel, discord.DMChannel) or \
+        message.channel.category.name == "English":
             return
 
         hasHeavyGif = False
         if message.attachments:
             for attach in message.attachments:
-                if attach.url.lower().endswith("gif"):
-                    if attach.size >= 1048576:
+                if attach.url.lower().endswith("gif") and attach.size >= 1048576:
                         hasHeavyGif = True
 
         if hasHeavyGif:
@@ -44,10 +42,11 @@ class General:
                         await ctx.author.send(link + " n'existe pas!")
 
 
-    @commands.command(aliases=["v"])
+    @commands.command(aliases=["v"], brief="Affiche une vidéo de la chaine Youtube de RMA.")
     async def video(self, ctx, video: str):
         """
-            Affiche une vidéo de RMA. Vidéos disponibles : bases, donjon1, donjon2, villes, export, meilleur, mapping, live, rediffusions.
+            Affiche une vidéo de RMA. Vidéos disponibles :
+            bases, donjon1, donjon2, villes, export, meilleur, mapping, live, rediffusions, starterpack, pont, jardinrme.
         """
         videos = {
             "bases":"https://www.youtube.com/watch?v=HKXL-0i7uAM",
@@ -58,7 +57,10 @@ class General:
             "meilleur":"https://www.youtube.com/watch?v=8RS2_VDglYM",
             "mapping":"https://www.youtube.com/watch?v=Y_QFv_WgxGo",
             "live":"https://www.youtube.com/c/AurelienVideos/live",
-            "rediffusions":"https://www.youtube.com/playlist?list=PLHKUrXMrDS5veYcSPO0bLSHblMsDlxVJC"
+            "rediffusions":"https://www.youtube.com/playlist?list=PLHKUrXMrDS5veYcSPO0bLSHblMsDlxVJC",
+            "starterpack":"https://www.youtube.com/watch?v=-fg5hy7VAwE",
+            "pont":"https://www.youtube.com/watch?v=jLjftJnE6dM",
+            "jardinrme":"https://www.youtube.com/watch?v=nHwSuBDEDhI"
         }
 
         if video in videos.keys():
