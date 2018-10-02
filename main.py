@@ -1,4 +1,4 @@
-from bot import Bot, logging_conf
+from bot import Bot, logging_conf, FormatHelp
 import discord
 import logging
 import logging.config
@@ -9,7 +9,10 @@ logging.config.dictConfig(logging_conf)
 log = logging.getLogger()
 
 help_attrs = dict(hidden=True, aliases=['aide', 'commandes'])
-bot = Bot(command_prefix='!', default_extensions=default_extensions, pm_help=True, help_attrs=help_attrs)
+bot = Bot(command_prefix='!', default_extensions=default_extensions, pm_help=True, help_attrs=help_attrs,
+          formatter=FormatHelp(),
+          command_not_found="Aucune commande nommée `{}`",
+          command_has_no_subcommands="Aucune sous-commandes pour {0.name}")
 
 
 @bot.event
@@ -38,9 +41,11 @@ async def on_command(ctx):
 async def on_command_error(ctx, err):
     log.error(u"{0.content} sent by {0.author.name}. Error : {1}".format(ctx.message, err))
 
+
 def get_account():
     with open('account') as f:
         return f.read()
+
 
 if __name__ == '__main__':
     log.info("--> Connecting..")

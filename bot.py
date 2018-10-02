@@ -19,6 +19,12 @@ class Bot(commands.Bot):
                     .format(ext, type(e).__name__, e))
 
 
+class FormatHelp(commands.HelpFormatter):
+    def get_ending_note(self):
+        command_name = self.context.invoked_with
+        return "Tapez {0}{1} <commande> pour plus d'information sur une commande spécifique.".format(self.clean_prefix, command_name)
+
+
 # This is ugly.
 logging_conf = {
     "version": 1,
