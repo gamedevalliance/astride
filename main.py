@@ -3,13 +3,14 @@ import discord
 import logging
 import logging.config
 
-default_extensions = ["cogs.general", "cogs.texte", "cogs.utils"]
+default_extensions = ["cogs.general", "cogs.texte", "cogs.utils", "cogs.challenge"]
 
 logging.config.dictConfig(logging_conf)
 log = logging.getLogger()
 
 help_attrs = dict(hidden=True, aliases=['aide', 'commandes'])
-bot = Bot(command_prefix='!', default_extensions=default_extensions, pm_help=True, help_attrs=help_attrs,
+bot = Bot(command_prefix='!', default_extensions=default_extensions,
+          pm_help=True, help_attrs=help_attrs,
           formatter=FormatHelp(),
           command_not_found="Aucune commande nommée `{}`",
           command_has_no_subcommands="Aucune sous-commandes pour {0.name}")
@@ -33,7 +34,7 @@ async def on_message(message):
 async def on_command(ctx):
     log.info(u"{0.content} sent by {0.author.name}".format(ctx.message))
 
-    if not isinstance(ctx.channel, discord.abc.PrivateChannel):
+    if not isinstance(ctx.channel, discord.abc.PrivateChannel) and ctx.invoked_with != "eval":
         await ctx.message.delete()
 
 

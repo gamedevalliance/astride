@@ -6,4 +6,4 @@ def is_princesseuh():
 
 
 def has_roles_or_staff():
-    return commands.check(lambda ctx: ctx.author.id in [98157796939272192, 102381101179219968] or commands.has_role("Le staff"))
+    return commands.check(commands.has_any_role("Le staff", "Animateur"))

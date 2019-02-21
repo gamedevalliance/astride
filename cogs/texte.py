@@ -15,7 +15,7 @@ class Textes:
     @commands.group(invoke_without_command=True, aliases=["t", "tag"])
     async def texte(self, ctx, *, texte: str):
         """
-            Il est possible de stocker ses propres textes afin de les afficher rapidement plus tard. Utilisez add pour stocker un texte et lui donner un nom, puis affichez-le en tapant simplement son nom.
+            Affichez facilement un texte stocké en écrivant son nom.
         """
         if texte is None:
             return

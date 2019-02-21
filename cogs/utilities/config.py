@@ -1,3 +1,27 @@
+"""
+The MIT License (MIT)
+
+Copyright (c) 2015 Rapptz
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the "Software"),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.
+"""
+
 import json
 import uuid
 import asyncio
@@ -7,6 +31,7 @@ import logging
 log = logging.getLogger()
 
 
+# TODO : A proper database should be used instead of a dumb json file
 class JSONAsset:
 
     def __init__(self, name, **options):
@@ -34,7 +59,7 @@ class JSONAsset:
 
     def load_from_file(self):
         try:
-            with open('userdata/' + self.name, 'r') as f:
+            with open('userdata/' + self.name, 'r', encoding='utf-8') as f:
                 self._content = json.load(f, object_hook=self.object_hook)
         except FileNotFoundError:
             self._content = {}
@@ -48,7 +73,7 @@ class JSONAsset:
         with open(temp, 'w', encoding='utf-8') as tmp:
             json.dump(
                 self._content.copy(),
-                tmp, ensure_ascii=True,
+                tmp, ensure_ascii=False,
                 cls=self.encoder,
                 separators=(',', ':'))
 
