@@ -1,6 +1,6 @@
-# Bot Discord pour RPG Maker Alliance
+# Bot Discord pour Game Dev Alliance
 
-Le bot RPG Maker Alliance permet d'afficher des textes et des liens fréquemment utilisés sur notre [serveur Discord](https://discord.gg/RrBppaj). Toutes les commandes sont utilisables sur le serveur ou en message privé avec le bot. Il existe trois catégories :
+Le bot Game Dev Alliance permet d'afficher des textes et des liens fréquemment utilisés sur notre [serveur Discord](https://discord.gg/RrBppaj). Toutes les commandes sont utilisables sur le serveur ou en message privé avec le bot. Il existe trois catégories :
 
 ```
 video
@@ -16,7 +16,7 @@ Ecrivez `!help <commande>` pour recevoir un MP avec des informations sur n'impor
 !video <nom>
 ```
 
-La catégorie `!video` affiche une vidéo de la [chaîne RPG Maker Alliance](https://www.youtube.com/c/AurelienVideos). On peut aussi écrire plus simplement `!v`. Voici toutes les commandes disponibles :
+La catégorie `!video` affiche une vidéo de la [chaîne Game Dev Alliance](https://www.youtube.com/c/AurelienVideos). On peut aussi écrire plus simplement `!v`. Voici toutes les commandes disponibles :
 
 ```
 !v bases            => "Les bases de RPG Maker en 30 minutes"
@@ -90,11 +90,11 @@ Affiche le nom de tous les textes actuellement enregistrés.
 Le nom doit être en un seul mot ou bien entre guillemets, tandis que le contenu est libre. Exemple :
 
 ```
-!t add RME Connaissez-vous le script RME ?
-!t add "site officiel" Le site officiel de RPG Maker est http://www.rpgmakerweb.com/
+!t add site Notre site est https://gamedevalliance.fr
+!t add "site Unity" Le site officiel de Unity est https://unity3d.com
 ```
 
-Dans le premier cas, le nom `RME` ne contient pas d'espace, donc les guillemets ne sont pas nécessaires.
+Dans le premier cas, le nom `site` ne contient pas d'espace, donc les guillemets ne sont pas nécessaires.
 
 #### Modifier un texte
 
