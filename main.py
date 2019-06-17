@@ -1,4 +1,4 @@
-from bot import Bot, logging_conf, FormatHelp
+from bot import Bot, logging_conf
 import discord
 import logging
 import logging.config
