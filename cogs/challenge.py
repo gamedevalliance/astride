@@ -8,7 +8,7 @@ import traceback
 from collections import namedtuple
 
 from discord.ext import commands
-from .utilities import config
+from .utilities import config, checks
 
 LinkResult = namedtuple("LinkResult", ["full_url", "host", "file_id", "extension"])
 CHALLENGE_CHANNEL = 529648061937352704
@@ -81,7 +81,7 @@ class Challenge:
 
 
     @challenge.command(aliases=["s", "new"])
-    @commands.has_any_role("Admins", "Animateurs")
+    @checks.has_roles_or_staff()
     async def set(self, ctx, *, challenge: str):
         """
             Applique un nouveau challenge
@@ -105,7 +105,7 @@ class Challenge:
 
 
     @challenge.command(aliases=["e"])
-    @commands.has_any_role("Admins", "Animateurs")
+    @checks.has_roles_or_staff()
     async def end(self, ctx):
         """
             Termine la période ouverte prématurement
@@ -116,7 +116,7 @@ class Challenge:
 
 
     @challenge.command(aliases=["ev"])
-    @commands.has_any_role("Admins", "Animateurs")
+    @checks.has_roles_or_staff()
     async def end_votes(self, ctx):
         """
             Termine la période de votes prématurement

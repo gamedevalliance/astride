@@ -75,7 +75,7 @@ class General:
 
 
     @commands.command(aliases=["s"])
-    @commands.has_any_role("Staff", "Animateurs")
+    @checks.has_roles_or_staff()
     async def say(self, ctx, *, content: str):
         ctx.send(content)
 

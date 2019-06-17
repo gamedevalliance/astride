@@ -6,4 +6,4 @@ def is_princesseuh():
 
 
 def has_roles_or_staff():
-    return commands.check(commands.has_any_role("Le staff", "Animateur"))
+    return commands.check(commands.has_any_role("Admin", "Équipe", "Développeuse Web"))
