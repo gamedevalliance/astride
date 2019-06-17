@@ -11,7 +11,6 @@ log = logging.getLogger()
 help_attrs = dict(hidden=True, aliases=['aide', 'commandes'])
 bot = Bot(command_prefix='!', default_extensions=default_extensions,
           pm_help=True, help_attrs=help_attrs,
-          formatter=FormatHelp(),
           command_not_found="Aucune commande nommée `{}`",
           command_has_no_subcommands="Aucune sous-commandes pour {0.name}")
 

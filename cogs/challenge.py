@@ -15,7 +15,7 @@ CHALLENGE_CHANNEL = 529648061937352704
 URL_REGEX = r"https?://([^/?#]*\.[^/?#]*)/([a-zA-Z0-9-/_?=]+)(\.[\S]+)?"
 
 
-class Challenge:
+class Challenge(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.challenges_database = config.JSONAsset('challenges.json', loop=bot.loop)

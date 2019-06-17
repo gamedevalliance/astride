@@ -4,7 +4,7 @@ from discord.ext import commands
 from .utilities import checks
 
 
-class Utils:
+class Utils(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 

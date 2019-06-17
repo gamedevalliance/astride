@@ -3,7 +3,7 @@ import difflib
 from discord.ext import commands
 from .utilities import config, checks
 
-class Textes:
+class Textes(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.texts = config.JSONAsset(
