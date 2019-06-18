@@ -12,7 +12,7 @@ from .utilities import config, checks
 
 LinkResult = namedtuple("LinkResult", ["full_url", "host", "extension"])
 CHALLENGE_CHANNEL = 529648061937352704
-URL_REGEX = r"https?://([^/?#]*\.[^/?#]*)/[a-zA-Z0-9-/_?=.]+(\.jpg|gif|png|jpeg)"
+URL_REGEX = r"^https?://([^/?#]*\.[^/?#]*)/(?:[a-zA-Z0-9-/_?=.])+?(jpg|gif|png|jpeg)?$"
 
 
 class Challenge(commands.Cog):
@@ -220,7 +220,7 @@ class Challenge(commands.Cog):
 
                 # Prepare embed
                 description = (message.content.replace(self.actual_challenge, "")).strip()
-                description = description[:150] + '…' if len(description) > 150 else description
+                description = description[:175] + '…' if len(description) > 175 else description
 
                 view_participation = "**[Voir la participation]({})**".format(result_url) if result_url else ""
                 view_original_message = "[Voir le message original]({})".format(message.jump_url)
