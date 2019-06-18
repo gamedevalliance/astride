@@ -10,6 +10,7 @@ class General(commands.Cog):
         self.bot = bot
 
 
+    @commands.Cog.listener()
     async def on_message(self, message):
         if (message.author.bot or
             isinstance(message.channel, discord.DMChannel) or

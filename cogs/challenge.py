@@ -10,9 +10,9 @@ from collections import namedtuple
 from discord.ext import commands
 from .utilities import config, checks
 
-LinkResult = namedtuple("LinkResult", ["full_url", "host", "file_id", "extension"])
+LinkResult = namedtuple("LinkResult", ["full_url", "host", "extension"])
 CHALLENGE_CHANNEL = 529648061937352704
-URL_REGEX = r"https?://([^/?#]*\.[^/?#]*)/([a-zA-Z0-9-/_?=]+)(\.[\S]+)?"
+URL_REGEX = r"https?://([^/?#]*\.[^/?#]*)/[a-zA-Z0-9-/_?=.]+(\.jpg|gif|png|jpeg)"
 
 
 class Challenge(commands.Cog):
@@ -25,7 +25,6 @@ class Challenge(commands.Cog):
         else:
             self.actual_challenge = None
 
-        # Variables used when forcing a state
         self.force_end = False
         self.force_end_votes = False
 
@@ -35,13 +34,15 @@ class Challenge(commands.Cog):
         self.challenge_check_task = bot.loop.create_task(self.manage_challenge())
 
 
+    @commands.Cog.listener()
     async def on_message(self, message):
         await self.add_participation(message)
 
 
+    @commands.Cog.listener()
     async def on_raw_message_edit(self, payload):
         channel = self.bot.get_channel(int(payload.data["channel_id"]))
-        message = await channel.get_message(int(payload.message_id))
+        message = await channel.fetch_message(int(payload.message_id))
 
         await self.add_participation(message)
 
@@ -55,11 +56,12 @@ class Challenge(commands.Cog):
         if self.challenges_database[self.actual_challenge]["state"] != "open":
             return
 
-        content = message.content.strip()
+        content = message.content.strip().lower()
+        challenge_code = self.actual_challenge.lower()
 
-        if content.startswith(self.actual_challenge) or content.endswith(self.actual_challenge):
+        if content.startswith(challenge_code) or content.endswith(challenge_code):
 
-            if content == self.actual_challenge:
+            if content == challenge_code:
                 await message.add_reaction('\N{THUMBS DOWN SIGN}')
                 return
 
@@ -138,7 +140,7 @@ class Challenge(commands.Cog):
                     self.get_channels_server()
 
                     # If we're Sunday and the challenge is in a open state (or force_end is true), show participations and go into the voting state
-                    if (now.weekday() == 0 and self.challenges_database[self.actual_challenge]["state"] == "open") or self.force_end:
+                    if (now.weekday() == 6 and self.challenges_database[self.actual_challenge]["state"] == "open") or self.force_end:
                         await self.channel.set_permissions(self.server.default_role, send_messages=False)
                         await self.channel.send("Les participations au challenge de la semaine sont maintenant fermées ! Place aux votes !")
 
@@ -151,7 +153,7 @@ class Challenge(commands.Cog):
                         self.force_end = False
 
                     # If we're Monday and the challenge is in a voting state (or force_end_votes is true), show the podium and end the current challenge
-                    if (now.weekday() == 1 and self.challenges_database[self.actual_challenge]["state"] == "voting") or self.force_end_votes:
+                    if (now.weekday() == 0 and self.challenges_database[self.actual_challenge]["state"] == "voting") or self.force_end_votes:
                         await self.print_podium()
 
                         await self.channel.send("Bien joué à tous les participants ! :clap: À très bientôt pour le prochain challenge de la semaine !")
@@ -164,14 +166,15 @@ class Challenge(commands.Cog):
                         self.actual_challenge = None
                         await self.channel.set_permissions(self.server.default_role, send_messages=True)
 
-                await asyncio.sleep(20)
-        except Exception:
-            print(traceback.format_exc())
+                await asyncio.sleep(30)
+
         except asyncio.CancelledError:
             pass
         except (OSError, discord.ConnectionClosed):
             self.challenge_check_task.cancel()
             self.challenge_check_task = self.bot.loop.create_task(self.manage_challenge())
+        except Exception:
+            print(traceback.format_exc())
 
 
     async def print_participations(self):
@@ -183,7 +186,7 @@ class Challenge(commands.Cog):
                 member = message = None
 
                 member = self.server.get_member(int(key))
-                message = await self.channel.get_message(int(value["id"]))
+                message = await self.channel.fetch_message(int(value["id"]))
 
                 if not member or not message:
                     logging.info("Member or message (Member : {}, Message : {}) not found!".format(key, value["id"]))
@@ -201,7 +204,8 @@ class Challenge(commands.Cog):
 
                     if (filename.endswith("png") or
                         filename.endswith("jpg") or
-                        filename.endswith("gif")):
+                        filename.endswith("gif") or
+                        filename.endswith("jpeg")):
                         image_thumbnail = True
 
                 # If we didn't find anything in the attachments, trying for URL..
@@ -212,7 +216,7 @@ class Challenge(commands.Cog):
                         result_url = link.full_url
 
                         if link.extension:
-                            image_thumbnail = link.extension in [".png", ".jpg", ".gif"]
+                            image_thumbnail = link.extension in ["png", "jpg", "gif", "jpeg"]
 
                 # Prepare embed
                 description = (message.content.replace(self.actual_challenge, "")).strip()
@@ -248,7 +252,7 @@ class Challenge(commands.Cog):
                 if key == "state" or key == "dates":
                     continue
 
-                message = await self.channel.get_message(int(value["bot_message_id"]))
+                message = await self.channel.fetch_message(int(value["bot_message_id"]))
                 author = self.server.get_member(int(key))
 
                 reaction = None
@@ -277,11 +281,13 @@ class Challenge(commands.Cog):
 
             e.add_field(name=":first_place: En première position", value=",".join(end_results[0]))
 
-            if end_results[1]:
-                e.add_field(name=":second_place: En deuxième position", value=",".join(end_results[1]))
+            if len(end_results) > 1:
+                if end_results[1]:
+                    e.add_field(name=":second_place: En deuxième position", value=",".join(end_results[1]))
 
-            if end_results[2]:
-                e.add_field(name=":third_place: En troisième position", value=",".join(end_results[2]))
+            if len(end_results) > 2:
+                if end_results[2]:
+                    e.add_field(name=":third_place: En troisième position", value=",".join(end_results[2]))
 
         await self.channel.send("Les votes sont clos ! Voici les résultats : ", embed=e)
 
@@ -292,7 +298,7 @@ class Challenge(commands.Cog):
             return None
 
         groups = search.groups()
-        return LinkResult(full_url=search.group(), host=groups[0], file_id=groups[1], extension=groups[2])
+        return LinkResult(full_url=search.group(), host=groups[0], extension=groups[1])
 
     def get_channels_server(self):
         if not self.channel:
