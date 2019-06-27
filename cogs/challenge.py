@@ -140,7 +140,7 @@ class Challenge(commands.Cog):
                     self.get_channels_server()
 
                     # If we're Sunday and the challenge is in a open state (or force_end is true), show participations and go into the voting state
-                    if (now.weekday() == 6 and self.challenges_database[self.actual_challenge]["state"] == "open") or self.force_end:
+                    if (now.weekday() == 0 and self.challenges_database[self.actual_challenge]["state"] == "open") or self.force_end:
                         await self.channel.set_permissions(self.server.default_role, send_messages=False)
                         await self.channel.send("Les participations au challenge de la semaine sont maintenant fermées ! Place aux votes !")
 
@@ -153,7 +153,7 @@ class Challenge(commands.Cog):
                         self.force_end = False
 
                     # If we're Monday and the challenge is in a voting state (or force_end_votes is true), show the podium and end the current challenge
-                    if (now.weekday() == 0 and self.challenges_database[self.actual_challenge]["state"] == "voting") or self.force_end_votes:
+                    if (now.weekday() == 1 and self.challenges_database[self.actual_challenge]["state"] == "voting") or self.force_end_votes:
                         await self.print_podium()
 
                         await self.channel.send("Bien joué à tous les participants ! :clap: À très bientôt pour le prochain challenge de la semaine !")
