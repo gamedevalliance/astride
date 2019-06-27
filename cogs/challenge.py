@@ -61,7 +61,7 @@ class Challenge(commands.Cog):
 
         if content.startswith(challenge_code) or content.endswith(challenge_code):
 
-            if content == challenge_code:
+            if content == challenge_code and not message.attachments:
                 await message.add_reaction('\N{THUMBS DOWN SIGN}')
                 return
 
@@ -219,8 +219,9 @@ class Challenge(commands.Cog):
                             image_thumbnail = link.extension in ["png", "jpg", "gif", "jpeg"]
 
                 # Prepare embed
-                description = (message.content.replace(self.actual_challenge, "")).strip()
-                description = description[:175] + '…' if len(description) > 175 else description
+                description = re.sub(r"\[" + re.escape(self.actual_challenge) + r"\]", "", message.content, flags=re.I)
+                description = description.strip()
+                description = self.smart_truncate(description)
 
                 view_participation = "**[Voir la participation]({})**".format(result_url) if result_url else ""
                 view_original_message = "[Voir le message original]({})".format(message.jump_url)
@@ -299,6 +300,12 @@ class Challenge(commands.Cog):
 
         groups = search.groups()
         return LinkResult(full_url=search.group(), host=groups[0], extension=groups[1])
+
+    def smart_truncate(content: str, length: int = 175, suffix: str = '…'):
+        if len(content) <= length:
+            return content
+        else:
+            return ' '.join(content[:length+1].split(' ')[0:-1]) + suffix
 
     def get_channels_server(self):
         if not self.channel:
