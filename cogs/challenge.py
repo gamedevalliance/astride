@@ -8,11 +8,29 @@ import traceback
 from collections import namedtuple
 
 from discord.ext import commands
+from discord.utils import escape_mentions
 from .utilities import config, checks
 
 LinkResult = namedtuple("LinkResult", ["full_url", "host", "extension"])
 CHALLENGE_CHANNEL = 529648061937352704
-URL_REGEX = r"^https?://([^/?#]*\.[^/?#]*)/(?:[a-zA-Z0-9-/_?=.])+?(jpg|gif|png|jpeg)?$"
+URL_REGEX = r"https?://(?:www.)?([^\s/$?#]+)(?:(?!\.(?:jpg|gif|png|jpeg))[^ \s])*(?:\.((?:jpg|gif|png|jpeg)))?[^\s]*"
+
+
+def smart_truncate(content: str, length: int = 175, suffix: str = '…'):
+    if len(content) <= length:
+        return content
+    else:
+        return ' '.join(content[:length+1].split(' ')[0:-1]) + suffix
+
+
+async def get_link(content: str):
+    search = re.search(URL_REGEX, content, flags=re.I)
+
+    if search is None:
+        return None
+
+    groups = search.groups()
+    return LinkResult(full_url=search.group(), host=groups[0], extension=groups[1])
 
 
 class Challenge(commands.Cog):
@@ -144,9 +162,14 @@ class Challenge(commands.Cog):
                         await self.channel.set_permissions(self.server.default_role, send_messages=False)
                         await self.channel.send("Les participations au challenge de la semaine sont maintenant fermées ! Place aux votes !")
 
-                        await self.print_participations()
+                        first_message = await self.print_participations()
 
-                        await self.channel.send("Pour voter, mettez un :thumbsup: sur une ou plusieurs participations. Vous avez jusqu'à lundi soir ! Bonne chance aux participants !")
+                        embed = discord.Embed(
+                            colour=discord.Colour(0xf9ac2f),
+                            description="[Revenir en haut]({})".format(first_message)
+                        )
+
+                        await self.channel.send("Pour voter, mettez un :thumbsup: sur une ou plusieurs participations. Vous avez jusqu'à **lundi soir** ! Bonne chance aux participants !", embed=embed)
 
                         self.challenges_database[self.actual_challenge]["state"] = "voting"
                         await self.challenges_database.save()
@@ -178,6 +201,8 @@ class Challenge(commands.Cog):
 
 
     async def print_participations(self):
+        first_message = None
+
         async with self.channel.typing():
             for key, value in self.challenges_database[self.actual_challenge].items():
                 if key == "state" or key == "dates":
@@ -194,11 +219,11 @@ class Challenge(commands.Cog):
 
                 # Find the participation content
                 image_thumbnail = False
-                result_url = None
+                link = None
 
                 if message.attachments:
                     attachment = message.attachments[0]
-                    result_url = attachment.url
+                    link = attachment.url
 
                     filename = attachment.filename.lower()
 
@@ -209,33 +234,36 @@ class Challenge(commands.Cog):
                         image_thumbnail = True
 
                 # If we didn't find anything in the attachments, trying for URL..
-                if not result_url:
-                    link = await self.get_link(message.content)
+                if not link:
+                    link = await get_link(message.content)
 
                     if link:
-                        result_url = link.full_url
-
                         if link.extension:
                             image_thumbnail = link.extension in ["png", "jpg", "gif", "jpeg"]
 
                 # Prepare embed
-                description = re.sub(r"\[" + re.escape(self.actual_challenge) + r"\]", "", message.content, flags=re.I)
-                description = description.strip()
-                description = self.smart_truncate(description)
+                description = re.sub(re.escape(self.actual_challenge), "", escape_mentions(message.content), flags=re.I).strip()
+                description = smart_truncate(description)
 
-                view_participation = "**[Voir la participation]({})**".format(result_url) if result_url else ""
+                view_participation = "**[Voir la participation]({})** {}".format(link.full_url if link else message.jump_url, ("("+link.host+")") if link else "")
                 view_original_message = "[Voir le message original]({})".format(message.jump_url)
 
-                description = description+"\n\n{}{}".format(view_participation, "\n"+view_original_message if view_participation else view_original_message)
+                description = description+"\n\n{}\n{}".format(view_participation, view_original_message)
 
-                e = discord.Embed(description=description)
+                e = discord.Embed(
+                    colour=discord.Colour(0xf9ac2f),
+                    description=description
+                )
                 e.set_author(name=member.display_name, icon_url=member.avatar_url)
 
                 if image_thumbnail:
-                    e.set_thumbnail(url=result_url)
+                    e.set_thumbnail(url=link.full_url)
 
                 # Send it!!
                 end_message = await self.channel.send(embed=e)
+
+                if not first_message:
+                    first_message = end_message.jump_url
 
                 self.challenges_database._content[self.actual_challenge][key]["bot_message_id"] = str(end_message.id)
 
@@ -243,6 +271,7 @@ class Challenge(commands.Cog):
                 await asyncio.sleep(1)
 
             await self.challenges_database.save()
+            return first_message
 
     async def print_podium(self):
         end_results = []
@@ -262,7 +291,9 @@ class Challenge(commands.Cog):
                         reaction = x
                         break
 
-                reactions_count[author.mention] = reaction.count
+                # This is not the greatest of idea. But. It. Works.
+                reactions_count[author.display_name + " (" + author.mention + ")"] = reaction.count
+
                 await asyncio.sleep(1)
 
             for i in range(3):
@@ -277,7 +308,7 @@ class Challenge(commands.Cog):
                 for key in results:
                     del reactions_count[key]
 
-            e = discord.Embed()
+            e = discord.Embed(colour=discord.Colour(0xf9ac2f))
             e.set_thumbnail(url="https://i.imgur.com/lFVTGMe.png")
 
             e.add_field(name=":first_place: En première position", value=",".join(end_results[0]))
@@ -291,21 +322,6 @@ class Challenge(commands.Cog):
                     e.add_field(name=":third_place: En troisième position", value=",".join(end_results[2]))
 
         await self.channel.send("Les votes sont clos ! Voici les résultats : ", embed=e)
-
-    async def get_link(self, content: str):
-        search = re.search(URL_REGEX, content)
-
-        if search is None:
-            return None
-
-        groups = search.groups()
-        return LinkResult(full_url=search.group(), host=groups[0], extension=groups[1])
-
-    def smart_truncate(content: str, length: int = 175, suffix: str = '…'):
-        if len(content) <= length:
-            return content
-        else:
-            return ' '.join(content[:length+1].split(' ')[0:-1]) + suffix
 
     def get_channels_server(self):
         if not self.channel:
