@@ -223,7 +223,7 @@ class Challenge(commands.Cog):
 
                 if message.attachments:
                     attachment = message.attachments[0]
-                    link = attachment.url
+                    link = LinkResult(full_url=attachment.url, host="cdn.discordapp.com", extension=None)
 
                     filename = attachment.filename.lower()
 
