@@ -45,11 +45,13 @@ class General(commands.Cog):
                         await ctx.author.send(link + " n'existe pas!")
 
 
-    @commands.command(aliases=["v"], brief="Affiche une vidéo de la chaine Youtube de RMA.")
+    @commands.command(aliases=["v"], brief="Affiche une vidéo de la chaine Youtube de GDA.")
     async def video(self, ctx, video: str):
         """
-            Affiche une vidéo de RMA. Vidéos disponibles :
-            bases, donjon1, donjon2, villes, export, meilleur, mapping, live, rediffusions, starterpack, pont, jardinrme.
+            Affiche une vidéo de GDA. Vidéos disponibles :
+            RPG Maker : bases, donjon1, donjon2, villes, export, meilleur, mapping, starterpack, pont, jardinrme
+            Ren'Py: renpy1, renpy2
+            Autres : live, rediffusions, débuter.
         """
         videos = {
             "bases": "https://www.youtube.com/watch?v=HKXL-0i7uAM",
@@ -63,7 +65,10 @@ class General(commands.Cog):
             "rediffusions": "https://www.youtube.com/playlist?list=PLHKUrXMrDS5veYcSPO0bLSHblMsDlxVJC",
             "starterpack": "https://www.youtube.com/watch?v=-fg5hy7VAwE",
             "pont": "https://www.youtube.com/watch?v=jLjftJnE6dM",
-            "jardinrme": "https://www.youtube.com/watch?v=nHwSuBDEDhI"
+            "jardinrme": "https://www.youtube.com/watch?v=nHwSuBDEDhI",
+            "renpy1": "https://www.youtube.com/watch?v=XprVZAtPqDI",
+            "renpy2": "https://www.youtube.com/watch?v=nqWEN4Z2420",
+            "debuter": "https://www.youtube.com/watch?v=LgAQWasSAXQ"
         }
 
         if video in videos.keys():

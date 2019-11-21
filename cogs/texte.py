@@ -70,7 +70,7 @@ class Textes(commands.Cog):
         await ctx.author.send("{}, texte {} édité et sauvegardé !".format(ctx.author.mention, nom))
 
 
-    @texte.command()
+    @texte.command(aliases=["supprime"])
     @checks.has_roles_or_staff()
     async def remove(self, ctx, *, nom: str):
         """
@@ -86,7 +86,7 @@ class Textes(commands.Cog):
         await ctx.author.send("{}, texte {} supprimé !".format(ctx.author.mention, nom))
 
 
-    @texte.command()
+    @texte.command(aliases=["liste"])
     async def list(self, ctx):
         """
             Affiche le nom de tous les textes actuellement enregistrés.
@@ -96,7 +96,7 @@ class Textes(commands.Cog):
         if textes:
             count = len(textes)
             textes = ", ".join("`{}`".format(texte) for texte in textes)
-            await ctx.author.send("**Liste des textes pour RMA ({}):**\n{}".format(count, textes))
+            await ctx.author.send("**Liste des textes ({}):**\n{}".format(count, textes))
 
 
 def setup(bot):

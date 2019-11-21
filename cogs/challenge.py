@@ -160,13 +160,13 @@ class Challenge(commands.Cog):
                     # If we're Sunday and the challenge is in a open state (or force_end is true), show participations and go into the voting state
                     if (now.weekday() == 0 and self.challenges_database[self.actual_challenge]["state"] == "open") or self.force_end:
                         await self.channel.set_permissions(self.server.default_role, send_messages=False)
-                        await self.channel.send("Les participations au challenge de la semaine sont maintenant fermées ! Place aux votes !")
+                        first_message = await self.channel.send("Les participations au challenge de la semaine sont maintenant fermées ! Place aux votes !")
 
-                        first_message = await self.print_participations()
+                        await self.print_participations()
 
                         embed = discord.Embed(
                             colour=discord.Colour(0xf9ac2f),
-                            description="[Revenir en haut]({})".format(first_message)
+                            description="[Revenir en haut]({})".format(first_message.jump_url)
                         )
 
                         await self.channel.send("Pour voter, mettez un :thumbsup: sur une ou plusieurs participations. Vous avez jusqu'à **lundi soir** ! Bonne chance aux participants !", embed=embed)
@@ -201,8 +201,6 @@ class Challenge(commands.Cog):
 
 
     async def print_participations(self):
-        first_message = None
-
         async with self.channel.typing():
             for key, value in self.challenges_database[self.actual_challenge].items():
                 if key == "state" or key == "dates":
@@ -211,10 +209,28 @@ class Challenge(commands.Cog):
                 member = message = None
 
                 member = self.server.get_member(int(key))
-                message = await self.channel.fetch_message(int(value["id"]))
 
-                if not member or not message:
-                    logging.info("Member or message (Member : {}, Message : {}) not found!".format(key, value["id"]))
+                # Probably not needed? Normally we wouldn't bother trying that hard but since the goal is for the bot
+                # to be more or less 100% automated, but I'd rather avoid something not working due to API issue /shrug
+                for i in range(3):
+                    try:
+                        message = await self.channel.fetch_message(int(value["id"]))
+                    except discord.HTTPException:
+                        logging.info("discord.HTTPException in getting message {}, try {}".format(value["id"], i))
+
+                        if i < 2:
+                            await asyncio.sleep(1)
+                            continue
+                        else:
+                            break
+                    break
+
+                if not member:
+                    logging.info("Member {} not found!".format(key))
+                    continue
+
+                if not message:
+                    logging.info("Message {} not found!".format(value["id"]))
                     continue
 
                 # Find the participation content
@@ -262,16 +278,12 @@ class Challenge(commands.Cog):
                 # Send it!!
                 end_message = await self.channel.send(embed=e)
 
-                if not first_message:
-                    first_message = end_message.jump_url
-
                 self.challenges_database._content[self.actual_challenge][key]["bot_message_id"] = str(end_message.id)
 
                 await end_message.add_reaction('\N{THUMBS UP SIGN}')
-                await asyncio.sleep(1)
+                await asyncio.sleep(1.5)
 
             await self.challenges_database.save()
-            return first_message
 
     async def print_podium(self):
         end_results = []
@@ -280,6 +292,10 @@ class Challenge(commands.Cog):
         async with self.channel.typing():
             for key, value in self.challenges_database[self.actual_challenge].items():
                 if key == "state" or key == "dates":
+                    continue
+
+                # Skip participations that didn't work
+                if not "bot_message_id" in value:
                     continue
 
                 message = await self.channel.fetch_message(int(value["bot_message_id"]))
@@ -311,15 +327,17 @@ class Challenge(commands.Cog):
             e = discord.Embed(colour=discord.Colour(0xf9ac2f))
             e.set_thumbnail(url="https://i.imgur.com/lFVTGMe.png")
 
-            e.add_field(name=":first_place: En première position", value=",".join(end_results[0]))
+
+            if len(end_results) > 0:
+                e.add_field(name=":first_place: En première position", value="\n".join(end_results[0]))
 
             if len(end_results) > 1:
                 if end_results[1]:
-                    e.add_field(name=":second_place: En deuxième position", value=",".join(end_results[1]))
+                    e.add_field(name=":second_place: En deuxième position", value="\n".join(end_results[1]))
 
             if len(end_results) > 2:
                 if end_results[2]:
-                    e.add_field(name=":third_place: En troisième position", value=",".join(end_results[2]))
+                    e.add_field(name=":third_place: En troisième position", value="\n".join(end_results[2]))
 
         await self.channel.send("Les votes sont clos ! Voici les résultats : ", embed=e)
 
