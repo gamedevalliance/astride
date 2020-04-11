@@ -132,12 +132,32 @@ Donne le nom du challenge actuel.
 
 ### Pour les modérateurs
 
+#### Lancer un challenge
+
 ```
 !challenge set NomDuChallenge
 !c s NomDuChallenge
 ```
 
 Lance un nouveau challenge de la semaine. Il ne faut pas mettre les crochets autour du nom : le bot le fait automatiquement. Habituellement, c'est la seule commande nécessaire pour organiser un challenge. Cependant, des commandes de debug sont disponibles :
+
+#### Définir une durée
+
+```
+!challenge duration 2
+```
+
+Change la durée en semaines du challenge actuel et des prochains. Il n'est donc pas nécessaire d'utiliser la commande à chaque challenge.
+
+#### Ajouter une participation
+
+```
+!challenge add 698379911806845008
+```
+
+Ajoute un message aux participations manuellement d'après son ID. Utile si le bot a manqué un message parce qu'il était éteint par exemple. Le message doit tout de même avoir un format valide pour que la commande fonctionne.
+
+### Terminer le challenge
 
 ```
 !challenge end
