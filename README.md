@@ -1,18 +1,23 @@
 # Bot Discord pour Game Dev Alliance
 
-Le bot Game Dev Alliance permet d'afficher des textes et des liens fréquemment utilisés sur notre [serveur Discord](https://discord.gg/RrBppaj). Toutes les commandes sont utilisables sur le serveur ou en message privé avec le bot. Il existe trois catégories :
-
-```
-video
-wiki
-texte
-```
+Le bot Game Dev Alliance permet d'afficher des textes et des liens fréquemment utilisés sur notre [serveur Discord](https://discord.gg/RrBppaj). Toutes les commandes sont utilisables sur le serveur ou en message privé avec le bot.
 
 Ecrivez `!help <commande>` pour recevoir un MP avec des informations sur n'importe quelle commande ou catégorie.
 
-## Textes personnalisés
+## Commandes publiques
 
-Il est possible de stocker ses propres textes, et de les nommer afin de les afficher rapidement plus tard. Toutes les commandes commencent par `!texte`, que l'on peut aussi écrire `!t` ou `!tag`.
+### Wiki
+
+```
+!wiki
+```
+
+Cette commande, que l'on peut aussi écrire `!w`, affiche un lien vers le wiki (https://wiki.gamedevalliance.fr/). Il est possible d'afficher un lien vers un article précis du wiki :
+
+```
+!wiki faq          => https://wiki.gamedevalliance.fr/faq
+!wiki rpgmaker     => https://wiki.gamedevalliance.fr/rpgmaker
+```
 
 ### Afficher un texte
 
@@ -20,29 +25,66 @@ Il est possible de stocker ses propres textes, et de les nommer afin de les affi
 !texte <nom>
 ```
 
-N'oubliez pas qu'il existe d'autres écritures plus rapides de `!texte`. Ainsi, ces trois lignes affichent le même résultat :
+Affiche un texte préparé par les modérateurs. N'oubliez pas qu'il existe d'autres écritures plus rapides de `!texte`. Ainsi, ces trois lignes affichent le même résultat :
 
 ```
-!texte jam3
-!tag jam3
-!t jam3
+!texte code
+!tag code
+!t code
 ```
 
 Si le nom que vous écrivez n'existe pas, le bot vous recommandera un nom similaire parmi ceux enregistrés.
-
-### Liste des textes
 
 ```
 !t list
 ```
 
-Affiche le nom de tous les textes actuellement enregistrés.
+Affiche la liste de tous les textes actuellement enregistrés.
 
 ![](https://i.imgur.com/9RBSt11.png)
 
+### Challenge de la semaine
+
+Au cours d'un challenge de la semaine, le bot peut automatiquement récupérer les participations contenant le \[NomDuChallenge], en indiquant sa réussite d'un emoji 👍, et ce jusqu'au dimanche soir à minuit. Ensuite, il présente toutes les participations et enregistre les votes du public le lundi soir à minuit. Le bot affiche alors un podium et le challenge est terminé.
+
+Les participations sont enregistrées par le bot pour conserver un historique des challenges.
+
+```
+!challenge
+!c
+```
+
+Donne le nom du challenge actuel.
+
+### Vidéos
+
+```
+!video <nom>
+```
+
+Affiche une vidéo de la [chaîne Game Dev Alliance](https://www.youtube.com/c/AurelienVideos). On peut aussi écrire plus simplement `!v`. Voici toutes les commandes disponibles :
+
+```
+!v bases            => "Les bases de RPG Maker en 30 minutes"
+!v donjon1          => "Créer un donjon sur RPG Maker : monstres et énigmes"
+!v donjon2          => "Créer un donjon sur RPG Maker : le boss final"
+!v villes           => "Créer une ville de RPG"
+!v export           => "Exporter son jeu RPG Maker : le guide ultime"
+!v meilleur         => "Quel est le meilleur RPG Maker ?"
+!v mapping          => "Créer un jeu plus beau - Tutoriel Mapping RPG Maker"
+!v live             => Live en cours
+!v rediffusions     => Playlist des rediffusions
+```
+
+En cas d'erreur de frappe, le bot recommandera un nom de vidéo similaire parmi ceux qui existent.
+
+## Commandes d'administration
+
+Les commandes suivantes sont réservées aux modérateurs.
+
 ### Gestion des textes
 
-*Les commandes suivantes sont réservées aux modérateurs.*
+Il est possible de stocker ses propres textes, et de les nommer afin de les afficher rapidement plus tard. Toutes les commandes commencent par `!texte`, que l'on peut aussi écrire `!t` ou `!tag`.
 
 #### Ajouter un texte
 
@@ -50,7 +92,7 @@ Affiche le nom de tous les textes actuellement enregistrés.
 !t add <nom> <contenu>
 ```
 
-Le nom doit être en un seul mot ou bien entre guillemets, tandis que le contenu est libre. Exemple :
+Le nom doit être en un seul mot (ou bien entre guillemets), tandis que le contenu est libre. Exemple :
 
 ```
 !t add site Notre site est https://gamedevalliance.fr
@@ -73,64 +115,7 @@ Remplace le contenu d'un texte existant.
 !t remove <nom>
 ```
 
----
-
-## Wiki
-
-```
-!wiki
-```
-
-Cette commande, que l'on peut aussi écrire `!w`, affiche un lien vers l'Encyclopédie du making (https://wiki.rpgmakeralliance.com/). Il est possible d'afficher un lien vers un article précis du wiki :
-
-```
-!wiki rpgmaker       => https://wiki.rpgmakeralliance.com/rpgmaker
-!wiki rpgmaker/faq   => https://wiki.rpgmakeralliance.com/rpgmaker/faq
-!wiki gamemaker      => https://wiki.rpgmakeralliance.com/gamemaker
-```
-
----
-
-## Vidéos
-
-```
-!video <nom>
-```
-
-La catégorie `!video` affiche une vidéo de la [chaîne Game Dev Alliance](https://www.youtube.com/c/AurelienVideos). On peut aussi écrire plus simplement `!v`. Voici toutes les commandes disponibles :
-
-```
-!v bases            => "Les bases de RPG Maker en 30 minutes"
-!v donjon1          => "Créer un donjon sur RPG Maker : monstres et énigmes"
-!v donjon2          => "Créer un donjon sur RPG Maker : le boss final"
-!v villes           => "Créer une ville de RPG"
-!v export           => "Exporter son jeu RPG Maker : le guide ultime"
-!v meilleur         => "Quel est le meilleur RPG Maker ?"
-!v mapping          => "Créer un jeu plus beau - Tutoriel Mapping RPG Maker"
-!v live             => Live en cours
-!v rediffusions     => Playlist des rediffusions
-```
-
-En cas d'erreur de frappe, le bot recommandera un nom de vidéo similaire parmi ceux qui existent.
-
----
-
-## Challenge de la semaine
-
-Au cours d'un challenge de la semaine, le bot peut automatiquement récupérer les participations contenant le \[NomDuChallenge], en indiquant sa réussite d'un emoji 👍, et ce jusqu'au dimanche soir à minuit. Ensuite, il présente toutes les participations et enregistre les votes du public le lundi soir à minuit. Le bot affiche alors un podium et le challenge est terminé.
-
-Les participations sont enregistrées par le bot pour conserver un historique des challenges.
-
-### Pour les utilisateurs
-
-```
-!challenge
-!c
-```
-
-Donne le nom du challenge actuel.
-
-### Pour les modérateurs
+### Challenge de la semaine
 
 #### Lancer un challenge
 
@@ -157,7 +142,7 @@ Change la durée en semaines du challenge actuel et des prochains. Il n'est donc
 
 Ajoute un message aux participations manuellement d'après son ID. Utile si le bot a manqué un message parce qu'il était éteint par exemple. Le message doit tout de même avoir un format valide pour que la commande fonctionne.
 
-### Terminer le challenge
+#### Terminer le challenge
 
 ```
 !challenge end
