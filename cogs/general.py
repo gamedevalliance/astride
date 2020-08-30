@@ -20,7 +20,7 @@ class General(commands.Cog):
         hasHeavyGif = False
         if message.attachments:
             for attach in message.attachments:
-                if attach.filename.lower().endswith("gif") and attach.size >= 1048576:
+                if attach.filename.lower().endswith("gif") and attach.size >= 2097152:
                         hasHeavyGif = True
                         break
 
