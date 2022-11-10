@@ -1,0 +1,32 @@
+{
+  "name": "astride",
+  "version": "0.1.0",
+  "license": "MIT",
+  "contributors": [
+    {
+      "name": "Goulven CLEC'H",
+      "email": "goulven.clech@protonmail.com",
+      "url": "https://github.com/GoulvenC"
+    },
+    {
+      "name": "Princesseuh",
+      "email": "princssdev@gmail.com",
+      "url": "https://github.com/Princesseuh"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gamedevalliance/astride"
+  },
+  "scripts": {
+    "deploy": "node deploy-commands.js",
+    "start": "node ."
+  },
+  "main": "index.js",
+  "dependencies": {
+    "@discordjs/builders": "^1.3.0",
+    "@discordjs/rest": "^1.3.0",
+    "discord-api-types": "^0.37.17",
+    "discord.js": "^14.6.0"
+  }
+}

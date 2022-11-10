@@ -1,5 +1,5 @@
-**/__pycache__
-client.log
 account
-.vscode/
-pylama.ini
+node_modules
+config.json
+.env
+.tool-versions
